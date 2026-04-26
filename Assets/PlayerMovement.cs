@@ -4,12 +4,14 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     public float moveSpeed = 6f;
+    public float turnSpeed = 120f;
     public float jumpForce = 7f;
 
     private Rigidbody rb;
     private bool isGrounded;
 
-    private Vector2 moveInput;
+    private float moveInput;
+    private float turnInput;
 
     void Start()
     {
@@ -25,26 +27,27 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        moveInput = Vector2.zero;
+        moveInput = 0f;
+        turnInput = 0f;
 
         if (keyboard.wKey.isPressed)
         {
-            moveInput.y += 1;
+            moveInput += 1f;
         }
 
         if (keyboard.sKey.isPressed)
         {
-            moveInput.y -= 1;
-        }
-
-        if (keyboard.dKey.isPressed)
-        {
-            moveInput.x += 1;
+            moveInput -= 1f;
         }
 
         if (keyboard.aKey.isPressed)
         {
-            moveInput.x -= 1;
+            turnInput -= 1f;
+        }
+
+        if (keyboard.dKey.isPressed)
+        {
+            turnInput += 1f;
         }
 
         if (keyboard.spaceKey.wasPressedThisFrame && isGrounded)
@@ -55,22 +58,40 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+        TurnPlayer();
         MovePlayer();
+    }
+
+    void TurnPlayer()
+    {
+        float turnAmount = turnInput * turnSpeed * Time.fixedDeltaTime;
+
+        Quaternion turnRotation = Quaternion.Euler(0f, turnAmount, 0f);
+
+        rb.MoveRotation(rb.rotation * turnRotation);
     }
 
     void MovePlayer()
     {
-        Vector3 moveDirection = new Vector3(moveInput.x, 0f, moveInput.y).normalized;
+        Vector3 forwardMovement = transform.forward * moveInput * moveSpeed;
 
-        Vector3 newVelocity = moveDirection * moveSpeed;
-        newVelocity.y = rb.linearVelocity.y;
+        Vector3 newVelocity = new Vector3(
+            forwardMovement.x,
+            rb.linearVelocity.y,
+            forwardMovement.z
+        );
 
         rb.linearVelocity = newVelocity;
     }
 
     void Jump()
     {
-        rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+        rb.linearVelocity = new Vector3(
+            rb.linearVelocity.x,
+            0f,
+            rb.linearVelocity.z
+        );
+
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
 
         isGrounded = false;
