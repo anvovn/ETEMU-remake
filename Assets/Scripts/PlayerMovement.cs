@@ -13,9 +13,12 @@ public class PlayerMovement : MonoBehaviour
     private float moveInput;
     private float turnInput;
 
+    public GameObject gameOverText;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        gameOverText.SetActive(false);
     }
 
     void Update()
@@ -118,6 +121,14 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = false;
+        }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            gameOverText.SetActive(true);
         }
     }
 }
