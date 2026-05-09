@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Door1
   - Ground
+  - Enemy
   layers:
   - Default
   - TransparentFX
