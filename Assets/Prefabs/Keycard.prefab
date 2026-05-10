@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4315656595487795212}
   - component: {fileID: 1168594254037161884}
   - component: {fileID: 5753653803196189465}
+  - component: {fileID: -4926692732471776753}
   m_Layer: 0
   m_Name: Keycard
   m_TagString: Door1
@@ -112,3 +113,17 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-4926692732471776753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4574584494732953457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9fe4153e79f1344ca39698eb3b5600e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KeycardPickup
+  interactionText: {fileID: 0}
+  promptMessage: Press E to pick up keycard
