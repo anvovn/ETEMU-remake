@@ -159,6 +159,7 @@ MonoBehaviour:
   moveSpeed: 6
   turnSpeed: 120
   jumpForce: 7
+  gameOverText: {fileID: 0}
 --- !u!1 &5835368095841314015
 GameObject:
   m_ObjectHideFlags: 0
