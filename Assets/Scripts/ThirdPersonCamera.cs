@@ -44,11 +44,12 @@ public class ThirdPersonCamera : MonoBehaviour
         Quaternion cameraRotation = Quaternion.Euler(pitch, yaw, 0f);
         Vector3 targetPosition = target.position + targetOffset;
         Vector3 wantedPosition = targetPosition - cameraRotation * Vector3.forward * distance;
+        float followAmount = 1f - Mathf.Exp(-followSpeed * Time.deltaTime);
 
         transform.position = Vector3.Lerp(
             transform.position,
             wantedPosition,
-            followSpeed * Time.deltaTime
+            followAmount
         );
 
         transform.LookAt(targetPosition);
