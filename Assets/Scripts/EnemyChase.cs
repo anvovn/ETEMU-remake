@@ -4,7 +4,6 @@ public class EnemyChase : MonoBehaviour
 {
     public float moveSpeed = 2f;
     public float stoppingDistance = 1.5f;
-    public Vector3 rotationOffset;
 
     private Transform player;
 
@@ -38,7 +37,7 @@ public class EnemyChase : MonoBehaviour
 
             transform.position += moveDirection * moveSpeed * Time.deltaTime;
 
-            transform.rotation = Quaternion.LookRotation(moveDirection) * Quaternion.Euler(rotationOffset);
+            transform.rotation = Quaternion.LookRotation(moveDirection);
         }
     }
 }
