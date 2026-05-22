@@ -159,6 +159,15 @@ MonoBehaviour:
   moveSpeed: 6
   turnSpeed: 120
   jumpForce: 7
+  dashSpeed: 16
+  dashDuration: 0.18
+  dashCooldown: 0.8
+  cameraTransform: {fileID: 0}
+  rotationOffset: {x: 0, y: 0, z: 0}
+  dashIndicatorText: {fileID: 0}
+  createDashIndicator: 1
+  dashReadyColor: {r: 0.3, g: 1, b: 0.45, a: 1}
+  dashCooldownColor: {r: 1, g: 0.85, b: 0.25, a: 1}
   gameOverText: {fileID: 0}
 --- !u!1 &5835368095841314015
 GameObject:
