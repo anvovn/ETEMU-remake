@@ -22,6 +22,15 @@ public class ExitDoor : MonoBehaviour
         }
     }
 
+    void OnEnable()
+    {
+        // Ensure win text is disabled when door becomes active
+        if (winText != null)
+        {
+            winText.SetActive(false);
+        }
+    }
+
     void Update()
     {
         if (nearbyInventory == null)
@@ -71,7 +80,9 @@ public class ExitDoor : MonoBehaviour
 
     void TryExit()
     {
-        if (!nearbyInventory.HasKeycard())
+        KeycardManager keycardManager = KeycardManager.instance;
+        
+        if (keycardManager == null || !keycardManager.AreAllKeycardsCollected())
         {
             SetPromptText(lockedMessage);
             return;
