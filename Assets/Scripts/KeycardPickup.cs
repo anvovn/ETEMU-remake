@@ -4,14 +4,14 @@ using UnityEngine.InputSystem;
 
 public class KeycardPickup : MonoBehaviour
 {
-    public TMP_Text interactionText;
     public string promptMessage = "Press E to pick up keycard";
 
     private PlayerInventory nearbyInventory;
+    private InteractionPromptManager promptManager;
 
     void Start()
     {
-        SetPromptVisible(false);
+        promptManager = FindObjectOfType<InteractionPromptManager>();
     }
 
     void Update()
@@ -26,7 +26,15 @@ public class KeycardPickup : MonoBehaviour
         if (keyboard != null && keyboard.eKey.wasPressedThisFrame)
         {
             nearbyInventory.AddKeycard();
-            SetPromptVisible(false);
+            
+            // Notify manager that a keycard was collected
+            KeycardManager manager = KeycardManager.instance;
+            if (manager != null)
+            {
+                manager.OnKeycardCollected();
+            }
+            
+            UnregisterPrompt();
             gameObject.SetActive(false);
         }
     }
@@ -42,7 +50,7 @@ public class KeycardPickup : MonoBehaviour
 
         if (nearbyInventory != null)
         {
-            SetPromptVisible(true);
+            RegisterPrompt();
         }
     }
 
@@ -58,16 +66,23 @@ public class KeycardPickup : MonoBehaviour
         if (exitingInventory == nearbyInventory)
         {
             nearbyInventory = null;
-            SetPromptVisible(false);
+            UnregisterPrompt();
         }
     }
 
-    void SetPromptVisible(bool visible)
+    void RegisterPrompt()
     {
-        if (interactionText != null)
+        if (promptManager != null)
         {
-            interactionText.text = promptMessage;
-            interactionText.gameObject.SetActive(visible);
+            promptManager.Register(this, promptMessage);
+        }
+    }
+
+    void UnregisterPrompt()
+    {
+        if (promptManager != null)
+        {
+            promptManager.Unregister(this);
         }
     }
 }
