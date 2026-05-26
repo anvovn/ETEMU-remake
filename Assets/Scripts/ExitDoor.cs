@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class ExitDoor : MonoBehaviour
 {
@@ -8,7 +9,7 @@ public class ExitDoor : MonoBehaviour
     public GameObject winText;
     public string promptMessage = "Press E to exit";
     public string lockedMessage = "You need a keycard";
-    public bool pauseGameOnWin = true;
+    public string nextSceneName = "level2";
 
     private PlayerInventory nearbyInventory;
 
@@ -89,23 +90,8 @@ public class ExitDoor : MonoBehaviour
         }
 
         SetPromptVisible(false);
-
-        if (winText != null)
-        {
-            winText.SetActive(true);
-        }
-
-        PlayerMovement playerMovement = nearbyInventory.GetComponent<PlayerMovement>();
-
-        if (playerMovement != null)
-        {
-            playerMovement.enabled = false;
-        }
-
-        if (pauseGameOnWin)
-        {
-            Time.timeScale = 0f;
-        }
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(nextSceneName);
     }
 
     void SetPromptVisible(bool visible)
