@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     public float dashSpeed = 16f;
     public float dashDuration = 0.18f;
     public float dashCooldown = 0.8f;
+    public float fallMultiplier = 2.5f;
     public Transform cameraTransform;
     public Vector3 rotationOffset;
     public TMP_Text dashIndicatorText;
@@ -103,6 +104,7 @@ public class PlayerMovement : MonoBehaviour
 
         rb.angularVelocity = Vector3.zero;
         MovePlayer();
+        ApplyExtraGravity();
         UpdateDashIndicator();
     }
 
@@ -262,9 +264,17 @@ public class PlayerMovement : MonoBehaviour
         isGrounded = false;
     }
 
+    void ApplyExtraGravity()
+    {
+        if (rb.linearVelocity.y < 0f)
+        {
+            rb.AddForce(Physics.gravity * (fallMultiplier - 1f), ForceMode.Acceleration);
+        }
+    }
+
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (IsGround(collision))
         {
             isGrounded = true;
         }
@@ -272,7 +282,7 @@ public class PlayerMovement : MonoBehaviour
 
     void OnCollisionStay(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (IsGround(collision))
         {
             isGrounded = true;
         }
@@ -280,10 +290,27 @@ public class PlayerMovement : MonoBehaviour
 
     void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (IsGround(collision))
         {
             isGrounded = false;
         }
+    }
+
+    bool IsGround(Collision collision)
+    {
+        Transform current = collision.transform;
+
+        while (current != null)
+        {
+            if (current.CompareTag("Ground"))
+            {
+                return true;
+            }
+
+            current = current.parent;
+        }
+
+        return false;
     }
 
     void OnTriggerEnter(Collider other)

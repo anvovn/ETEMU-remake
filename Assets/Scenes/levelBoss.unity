@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 335274194}
   m_Layer: 0
   m_Name: Environment
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -321,16 +321,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9003343512051256914, guid: f32aa7b9151439f45b5c15db3d7c592b, type: 3}
       propertyPath: moveSpeed
-      value: 5
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 9003343512051256914, guid: f32aa7b9151439f45b5c15db3d7c592b, type: 3}
       propertyPath: turnSpeed
-      value: 15
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 9003343512051256914, guid: f32aa7b9151439f45b5c15db3d7c592b, type: 3}
       propertyPath: cameraTransform
       value: 
       objectReference: {fileID: 1060602271}
+    - target: {fileID: 9003343512051256914, guid: f32aa7b9151439f45b5c15db3d7c592b, type: 3}
+      propertyPath: rotationOffset.x
+      value: -90
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
