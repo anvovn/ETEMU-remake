@@ -1,7 +1,6 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -18,6 +17,10 @@ public class PlayerMovement : MonoBehaviour
     public bool createDashIndicator = true;
     public Color dashReadyColor = new Color(0.3f, 1f, 0.45f);
     public Color dashCooldownColor = new Color(1f, 0.85f, 0.25f);
+    public Material dashStatusParticleMaterial;
+    public ParticleSystem dashStatusParticles;
+    public bool createDashStatusParticles = true;
+    public Vector3 dashStatusParticlesOffset = new Vector3(0f, 0.2f, 0.25f);
 
     private Rigidbody rb;
     private bool isGrounded;
@@ -28,6 +31,9 @@ public class PlayerMovement : MonoBehaviour
     private float dashTimer;
     private float dashCooldownTimer;
     private Vector3 dashDirection;
+    private bool dashStatusWasReady;
+    private Vector3 startPosition;
+    private Quaternion startRotation;
 
     public GameObject gameOverText;
 
@@ -35,6 +41,8 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.interpolation = RigidbodyInterpolation.Interpolate;
+        startPosition = rb.position;
+        startRotation = rb.rotation;
 
         if (cameraTransform == null && Camera.main != null)
         {
@@ -46,8 +54,8 @@ public class PlayerMovement : MonoBehaviour
             gameOverText.SetActive(false);
         }
 
-        SetupDashIndicator();
-        UpdateDashIndicator();
+        SetupDashStatusEffect();
+        UpdateDashStatusEffect(true);
     }
 
     void Update()
@@ -92,7 +100,7 @@ public class PlayerMovement : MonoBehaviour
             StartDash();
         }
 
-        UpdateDashIndicator();
+        UpdateDashStatusEffect();
     }
 
     void FixedUpdate()
@@ -105,7 +113,7 @@ public class PlayerMovement : MonoBehaviour
         rb.angularVelocity = Vector3.zero;
         MovePlayer();
         ApplyExtraGravity();
-        UpdateDashIndicator();
+        UpdateDashStatusEffect();
     }
 
     void MovePlayer()
@@ -191,10 +199,32 @@ public class PlayerMovement : MonoBehaviour
         isDashing = true;
         dashTimer = dashDuration;
         dashCooldownTimer = dashCooldown;
-        UpdateDashIndicator();
+        UpdateDashStatusEffect(true);
     }
 
-    void SetupDashIndicator()
+    void SetupDashStatusEffect()
+    {
+        DisableDashIndicatorText();
+
+        if (dashStatusParticles == null)
+        {
+            dashStatusParticles = GetComponentInChildren<ParticleSystem>();
+        }
+
+        if (dashStatusParticles != null || !createDashStatusParticles)
+        {
+            return;
+        }
+
+        GameObject particleObject = new GameObject("DashStatusParticles");
+        particleObject.transform.SetParent(transform, false);
+        particleObject.transform.localPosition = dashStatusParticlesOffset;
+
+        dashStatusParticles = particleObject.AddComponent<ParticleSystem>();
+        ConfigureDashStatusParticles();
+    }
+
+    void DisableDashIndicatorText()
     {
         if (dashIndicatorText == null)
         {
@@ -206,49 +236,109 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        if (dashIndicatorText != null || !createDashIndicator)
+        if (dashIndicatorText != null)
         {
-            return;
+            dashIndicatorText.gameObject.SetActive(false);
         }
-
-        Canvas canvas = FindObjectOfType<Canvas>();
-
-        if (canvas == null)
-        {
-            GameObject canvasObject = new GameObject("Canvas", typeof(RectTransform));
-            canvas = canvasObject.AddComponent<Canvas>();
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            canvasObject.AddComponent<CanvasScaler>();
-            canvasObject.AddComponent<GraphicRaycaster>();
-        }
-
-        GameObject textObject = new GameObject("DashIndicatorText", typeof(RectTransform));
-        textObject.transform.SetParent(canvas.transform, false);
-
-        dashIndicatorText = textObject.AddComponent<TextMeshProUGUI>();
-        dashIndicatorText.alignment = TextAlignmentOptions.Center;
-        dashIndicatorText.fontSize = 28f;
-        dashIndicatorText.fontStyle = FontStyles.Bold;
-
-        RectTransform rectTransform = dashIndicatorText.rectTransform;
-        rectTransform.anchorMin = new Vector2(1f, 0f);
-        rectTransform.anchorMax = new Vector2(1f, 0f);
-        rectTransform.pivot = new Vector2(1f, 0f);
-        rectTransform.anchoredPosition = new Vector2(-32f, 32f);
-        rectTransform.sizeDelta = new Vector2(220f, 50f);
     }
 
-    void UpdateDashIndicator()
+    void ConfigureDashStatusParticles()
     {
-        if (dashIndicatorText == null)
+        ParticleSystem.MainModule main = dashStatusParticles.main;
+        main.loop = true;
+        main.playOnAwake = true;
+        main.startLifetime = new ParticleSystem.MinMaxCurve(0.8f, 1.35f);
+        main.startSpeed = new ParticleSystem.MinMaxCurve(0.08f, 0.28f);
+        main.startSize = new ParticleSystem.MinMaxCurve(0.22f, 0.48f);
+        main.simulationSpace = ParticleSystemSimulationSpace.World;
+        main.maxParticles = 80;
+
+        ParticleSystem.EmissionModule emission = dashStatusParticles.emission;
+        emission.enabled = true;
+        emission.rateOverTime = 14f;
+
+        ParticleSystem.ShapeModule shape = dashStatusParticles.shape;
+        shape.enabled = true;
+        shape.shapeType = ParticleSystemShapeType.Sphere;
+        shape.radius = 0.25f;
+        shape.radiusThickness = 1f;
+
+        ParticleSystem.ColorOverLifetimeModule colorOverLifetime = dashStatusParticles.colorOverLifetime;
+        colorOverLifetime.enabled = true;
+
+        ParticleSystemRenderer renderer = dashStatusParticles.GetComponent<ParticleSystemRenderer>();
+        renderer.renderMode = ParticleSystemRenderMode.Billboard;
+        renderer.sortingOrder = 10;
+        ApplyDashStatusParticleMaterial(renderer);
+    }
+
+    void UpdateDashStatusEffect(bool forceColorUpdate = false)
+    {
+        if (dashStatusParticles == null)
         {
             return;
         }
 
+        ApplyDashStatusParticleMaterial(dashStatusParticles.GetComponent<ParticleSystemRenderer>());
+
         bool dashReady = !isDashing && dashCooldownTimer <= 0f;
-        dashIndicatorText.gameObject.SetActive(true);
-        dashIndicatorText.text = dashReady ? "Dash Ready" : "Dash " + Mathf.CeilToInt(dashCooldownTimer * 10f) / 10f + "s";
-        dashIndicatorText.color = dashReady ? dashReadyColor : dashCooldownColor;
+
+        if (forceColorUpdate || dashReady != dashStatusWasReady)
+        {
+            SetDashStatusParticleColor(dashReady ? dashReadyColor : dashCooldownColor);
+            dashStatusWasReady = dashReady;
+        }
+
+        if (!dashStatusParticles.isPlaying)
+        {
+            dashStatusParticles.Play();
+        }
+    }
+
+    void SetDashStatusParticleColor(Color color)
+    {
+        ParticleSystem.MainModule main = dashStatusParticles.main;
+        main.startColor = color;
+
+        ParticleSystem.ColorOverLifetimeModule colorOverLifetime = dashStatusParticles.colorOverLifetime;
+        Gradient gradient = new Gradient();
+        gradient.SetKeys(
+            new[]
+            {
+                new GradientColorKey(color, 0f),
+                new GradientColorKey(color, 1f)
+            },
+            new[]
+            {
+                new GradientAlphaKey(0.25f, 0f),
+                new GradientAlphaKey(0f, 1f)
+            }
+        );
+        colorOverLifetime.color = gradient;
+    }
+
+    void ApplyDashStatusParticleMaterial(ParticleSystemRenderer renderer)
+    {
+        if (renderer != null && dashStatusParticleMaterial != null && renderer.sharedMaterial != dashStatusParticleMaterial)
+        {
+            renderer.sharedMaterial = dashStatusParticleMaterial;
+        }
+    }
+
+    public void RespawnAtStart()
+    {
+        isDashing = false;
+        dashTimer = 0f;
+        dashCooldownTimer = 0f;
+
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        rb.position = startPosition;
+        rb.rotation = startRotation;
+
+        transform.SetPositionAndRotation(startPosition, startRotation);
+        Physics.SyncTransforms();
+        UpdateDashStatusEffect(true);
     }
 
     void Jump()
