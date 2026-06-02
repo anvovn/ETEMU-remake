@@ -1,6 +1,8 @@
 using TMPro;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -34,8 +36,10 @@ public class PlayerMovement : MonoBehaviour
     private bool dashStatusWasReady;
     private Vector3 startPosition;
     private Quaternion startRotation;
+    private bool isGameOver;
 
     public GameObject gameOverText;
+    public float gameOverResetDelay = 1f;
 
     void Start()
     {
@@ -60,6 +64,11 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        if (isGameOver)
+        {
+            return;
+        }
+
         verticalInput = 0f;
         horizontalInput = 0f;
 
@@ -105,6 +114,13 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (isGameOver)
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            return;
+        }
+
         if (dashCooldownTimer > 0f)
         {
             dashCooldownTimer -= Time.fixedDeltaTime;
@@ -405,12 +421,58 @@ public class PlayerMovement : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Enemy"))
+        if (IsEnemy(other.transform))
         {
-            if (gameOverText != null)
-            {
-                gameOverText.SetActive(true);
-            }
+            TriggerGameOver();
         }
+    }
+
+    bool IsEnemy(Transform current)
+    {
+        while (current != null)
+        {
+            if (current.CompareTag("Enemy"))
+            {
+                return true;
+            }
+
+            current = current.parent;
+        }
+
+        return false;
+    }
+
+    void TriggerGameOver()
+    {
+        if (isGameOver)
+        {
+            return;
+        }
+
+        isGameOver = true;
+        isDashing = false;
+        verticalInput = 0f;
+        horizontalInput = 0f;
+
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+
+        if (gameOverText != null)
+        {
+            gameOverText.SetActive(true);
+        }
+
+        StartCoroutine(ResetSceneAfterGameOverDelay());
+    }
+
+    IEnumerator ResetSceneAfterGameOverDelay()
+    {
+        yield return new WaitForSecondsRealtime(gameOverResetDelay);
+
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
