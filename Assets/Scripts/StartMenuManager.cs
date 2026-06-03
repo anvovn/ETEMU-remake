@@ -13,4 +13,8 @@ public class StartMenuManager : MonoBehaviour
         // Quit the application
         Application.Quit();
     }
+    public void ReturnToMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
 }

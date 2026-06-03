@@ -30,8 +30,18 @@ public class BossBehaviour : MonoBehaviour
         health -= damage;
         slider.value = 1-(health/100f);
         healthText.text = health.ToString("0") + "/100";
+        if (health <= 0)
+        {
+            triggerDeath();
+        }
     }
 
+    void triggerDeath()
+    {
+        // Play death animation or effects here
+            Debug.Log("Boss defeated!");
+            Destroy(gameObject); // Remove the boss from the scene
+    }
     void spawnLandPoint()
     {
         Debug.Log("Spawning crosshair");    
