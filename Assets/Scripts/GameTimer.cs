@@ -13,7 +13,7 @@ public class PersistentTimer : MonoBehaviour
     [Header("Speedrun Settings")]
     [Tooltip("Time threshold in seconds (e.g., 300 seconds = 5 minutes)")]
     [SerializeField] private float speedrunThreshold = 300f;
-    [SerializeField] private string speedrunAchievementKey = "Speedrunner_Under_5_Mins";
+    [SerializeField] private string speedrunAchievementKey = "Fastest Duck in the North West";
 
     private float totalPlayTime = 0f;
     private bool isTimerRunning = false;

@@ -10,7 +10,7 @@ public class ExitDoor : MonoBehaviour
     public string promptMessage = "Press E to exit";
     public string lockedMessage = "You need a keycard";
     public string nextSceneName = "level2";
-    public string level1Achivement = "From Humble Beginnings: Clear Level 1";
+    public string level1Achievement = "From Humble Beginnings: Clear Level 1";
 
     private PlayerInventory nearbyInventory;
 
@@ -94,7 +94,7 @@ public class ExitDoor : MonoBehaviour
         Time.timeScale = 1f;
         if (PersistentTimer.Instance != null)
         {
-            PersistentTimer.Instance.UnlockAchievement(level1Achivement);
+            PersistentTimer.Instance.UnlockAchievement(level1Achievement);            
         }
         SceneManager.LoadScene(nextSceneName);
     }

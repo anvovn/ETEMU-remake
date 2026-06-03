@@ -13,6 +13,7 @@ public class BossBehaviour : MonoBehaviour
     private float health = 100f;
     private bool passed50 = false;
     private Vector3 currentPosition;
+    public string level3Achievement = "Down Goes Fredrick: Complete Level 3";
 
 
     private float xPos;
@@ -50,6 +51,8 @@ public class BossBehaviour : MonoBehaviour
     void triggerDeath()
     {
         // Play death animation or effects here
+            PersistentTimer.Instance.UnlockAchievement(level3Achievement);
+            PersistentTimer.Instance.CheckSpeedrunAchievement();
             Debug.Log("Boss defeated!");
             Destroy(gameObject); // Remove the boss from the scene
             SceneManager.LoadScene("WinScreen");
