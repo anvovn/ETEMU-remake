@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 6076711939396748705}
   - component: {fileID: 4999867172780785567}
   - component: {fileID: 8615579777894961207}
-  - component: {fileID: 1046510775602780167}
+  - component: {fileID: 2255606053302476800}
   m_Layer: 0
-  m_Name: Enemy
+  m_Name: BossEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -115,7 +115,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2, y: 2, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1046510775602780167
+--- !u!114 &2255606053302476800
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -124,12 +124,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7358963004665122525}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86a8598f6ae78fa46baa111c5ebd9ee2, type: 3}
+  m_Script: {fileID: 11500000, guid: 08c58242c4522405c9e7c462ef262179, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyChase
-  moveSpeed: 2
-  stoppingDistance: 1.5
-  rotationOffset: {x: 0, y: 0, z: 0}
+  m_EditorClassIdentifier: '::'
+  crosshairPrefab: {fileID: 8373249164532579399, guid: 9f357dc2baa584be18e95f79a2394897, type: 3}
 --- !u!1001 &2282692402038274303
 PrefabInstance:
   m_ObjectHideFlags: 0
