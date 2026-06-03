@@ -8,6 +8,8 @@ TagManager:
   - Ground
   - Enemy
   - ExitDoor
+  - BossDamager
+  - Chair
   layers:
   - Default
   - TransparentFX

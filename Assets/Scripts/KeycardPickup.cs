@@ -9,6 +9,8 @@ public class KeycardPickup : MonoBehaviour
     private PlayerInventory nearbyInventory;
     private InteractionPromptManager promptManager;
 
+    public AudioSource pickupSound;
+
     void Start()
     {
         promptManager = FindObjectOfType<InteractionPromptManager>();
@@ -26,6 +28,10 @@ public class KeycardPickup : MonoBehaviour
         if (keyboard != null && keyboard.eKey.wasPressedThisFrame)
         {
             nearbyInventory.AddKeycard();
+            if (pickupSound != null)
+            {
+                pickupSound.Play();
+            }
             
             // Notify manager that a keycard was collected
             KeycardManager manager = KeycardManager.instance;

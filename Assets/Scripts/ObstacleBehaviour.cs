@@ -11,12 +11,15 @@ public class ObstacleBehaviour : MonoBehaviour
         Invoke(nameof(SpawnObstacle), 3f);
 
     }
+
     void SpawnObstacle()
     {
         Vector3 spawnPosition = new Vector3(transform.position.x, 1f, transform.position.z);
-        Instantiate(obstaclePrefab, spawnPosition, Quaternion.Euler(270, 0, 0));
+        GameObject chair = Instantiate(obstaclePrefab, spawnPosition, Quaternion.Euler(270, 0, 0));
+        chair.tag = "Chair";
+        BoxCollider collider = chair.AddComponent<BoxCollider>();
+        collider.isTrigger = true;
+        
         Destroy(gameObject);
     }
-
-
 }
