@@ -880,7 +880,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 830228238700032975, guid: f32aa7b9151439f45b5c15db3d7c592b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1549576633}
   m_SourcePrefab: {fileID: 100100000, guid: f32aa7b9151439f45b5c15db3d7c592b, type: 3}
 --- !u!4 &981681117 stripped
 Transform:
@@ -1262,11 +1265,35 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1544539855 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6333614244935675449, guid: eb9598241a45940c7afd1ef7815a4afb, type: 3}
+  m_PrefabInstance: {fileID: 7621885431268660249}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08c58242c4522405c9e7c462ef262179, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossBehaviour
 --- !u!1 &1549576627 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 830228238700032975, guid: f32aa7b9151439f45b5c15db3d7c592b, type: 3}
   m_PrefabInstance: {fileID: 981681116}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1549576633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1549576627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c723f9a8027f5420d8be9bc76abc01ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  bossBehaviour: {fileID: 1544539855}
 --- !u!1 &1716265621
 GameObject:
   m_ObjectHideFlags: 0

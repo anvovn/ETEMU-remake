@@ -25,10 +25,10 @@ public class BossBehaviour : MonoBehaviour
     //X range = -30 to 30
     //Y range = -30 to 30
     // Update is called once per frame
-    void takeDamage(float damage)
+    public void takeDamage(float damage)
     {
         health -= damage;
-        slider.value = health;
+        slider.value = 1-(health/100f);
         healthText.text = health.ToString("0") + "/100";
     }
 
@@ -57,6 +57,7 @@ public class BossBehaviour : MonoBehaviour
         Debug.Log("Moving to target Y");
         elapsedTime = 0f;
         duration /= 2f;
+        duration +=0.5f;
 
         while (elapsedTime < duration)
         {

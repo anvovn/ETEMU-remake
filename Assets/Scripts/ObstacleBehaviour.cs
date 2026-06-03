@@ -8,7 +8,7 @@ public class ObstacleBehaviour : MonoBehaviour
     void Start()
     {
         //on start, set timer for 3 seconds. then spwan obstacle
-        Invoke(nameof(makeEnemy), 2.9f);
+        Invoke(nameof(makeEnemy), 2.5f);
         Invoke(nameof(SpawnObstacle), 3f);
 
     }
