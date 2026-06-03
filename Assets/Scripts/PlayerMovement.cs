@@ -24,6 +24,8 @@ public class PlayerMovement : MonoBehaviour
     public bool createDashStatusParticles = true;
     public Vector3 dashStatusParticlesOffset = new Vector3(0f, 0.2f, 0.25f);
 
+    public AudioSource deathAudio;
+
     private Rigidbody rb;
     private bool isGrounded;
     private bool isDashing;
@@ -60,6 +62,8 @@ public class PlayerMovement : MonoBehaviour
 
         SetupDashStatusEffect();
         UpdateDashStatusEffect(true);
+
+
     }
 
     void Update()
@@ -343,6 +347,11 @@ public class PlayerMovement : MonoBehaviour
 
     public void RespawnAtStart()
     {
+        if (gameObject.scene.buildIndex == 2)
+        {
+            deathAudio.Play();
+        }
+
         isDashing = false;
         dashTimer = 0f;
         dashCooldownTimer = 0f;
@@ -447,6 +456,11 @@ public class PlayerMovement : MonoBehaviour
         if (isGameOver)
         {
             return;
+        }
+
+        if (gameObject.scene.buildIndex == 1||gameObject.scene.buildIndex == 3)
+        {
+            deathAudio.Play();
         }
 
         isGameOver = true;
