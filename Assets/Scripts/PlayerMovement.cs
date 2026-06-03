@@ -431,7 +431,7 @@ public class PlayerMovement : MonoBehaviour
     {
         while (current != null)
         {
-            if (current.CompareTag("Enemy"))
+            if (current.CompareTag("Enemy")||current.CompareTag("Chair"))
             {
                 return true;
             }

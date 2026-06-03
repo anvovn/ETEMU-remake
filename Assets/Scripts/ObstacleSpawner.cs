@@ -30,6 +30,6 @@ public class ObstacleSpawner : MonoBehaviour
             zPos = Random.Range(-20f, 20f);
         }
         Vector3 spawnPosition = new Vector3(xPos, 2.5f, zPos);
-        Instantiate(keycardPrefab, spawnPosition, Quaternion.identity);
+        Instantiate(keycardPrefab, spawnPosition, Quaternion.Euler(90f, 0f, 90f));
     }
 }

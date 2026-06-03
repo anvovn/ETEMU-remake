@@ -10,7 +10,7 @@ public class FinalBossBehaviour : MonoBehaviour
     {
         if (other.gameObject.CompareTag("BossDamager"))
         {
-            bossBehaviour.takeDamage(7f);
+            bossBehaviour.takeDamage(11f);
             Destroy(other.gameObject);
         }
     }

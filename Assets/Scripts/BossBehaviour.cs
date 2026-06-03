@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 public class BossBehaviour : MonoBehaviour
 {
 
@@ -10,6 +11,7 @@ public class BossBehaviour : MonoBehaviour
     [SerializeField] private Slider slider;
     [SerializeField] private TMP_Text healthText;
     private float health = 100f;
+    private bool passed50 = false;
     private Vector3 currentPosition;
 
 
@@ -19,7 +21,7 @@ public class BossBehaviour : MonoBehaviour
     void Start()
     {    
         currentPosition = transform.position;
-        InvokeRepeating("spawnLandPoint", 2f, 10f);
+        InvokeRepeating("spawnLandPoint", 2f, 8f);
     }
 
     //X range = -30 to 30
@@ -30,6 +32,15 @@ public class BossBehaviour : MonoBehaviour
         health -= damage;
         slider.value = 1-(health/100f);
         healthText.text = health.ToString("0") + "/100";
+        if(health < 50 && !passed50)
+        {
+            passed50 = true;
+            GameObject[] chairs = GameObject.FindGameObjectsWithTag("Chair");
+            foreach (GameObject chair in chairs)
+            {
+                Destroy(chair);
+            }
+        }
         if (health <= 0)
         {
             triggerDeath();
@@ -41,6 +52,7 @@ public class BossBehaviour : MonoBehaviour
         // Play death animation or effects here
             Debug.Log("Boss defeated!");
             Destroy(gameObject); // Remove the boss from the scene
+            SceneManager.LoadScene("WinScreen");
     }
     void spawnLandPoint()
     {

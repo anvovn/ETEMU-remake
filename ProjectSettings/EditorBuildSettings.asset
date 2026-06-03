@@ -17,6 +17,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/levelBoss.unity
     guid: 5175a7da7da3f46908e049e7462de183
+  - enabled: 1
+    path: Assets/Scenes/WinScreen.unity
+    guid: c2f90253c7fab4923b1af2d8910af905
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
